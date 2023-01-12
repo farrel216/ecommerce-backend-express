@@ -13,6 +13,7 @@ var apiRouter = require('./routes/api');
 var usersRouter = require('./routes/users');
 
 var app = express();
+const origin = process.env.ORIGIN
 const port = process.env.PORT || 5000;
 // view engine setup
 app.listen(port, () => {
@@ -20,7 +21,7 @@ app.listen(port, () => {
 });
 app.use(methodOverride('_method'));
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000',origin],
   credentials: true
 }))
 app.use(logger('dev'));
