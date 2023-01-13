@@ -1,6 +1,10 @@
 const User = require ("../models/userModel.js");
 const jwt = require("jsonwebtoken");
 
+function generateAccessToken(data) {
+    return jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15s' });
+  }
+
 const refreshToken = async (req,res) => {
     try {
         const token = req.cookies['refreshToken']
@@ -11,7 +15,7 @@ const refreshToken = async (req,res) => {
             jwt.verify(token, process.env.REFRESH_TOKEN_SECRET,(err,decoded)=>{
                 if(err) return res.status(403).send(err)
                 const id = decoded._id
-                const accessToken = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 15 });
+                const accessToken = generateAccessToken({id});
                 res.status(200).send({accessToken})
             })
         }
@@ -20,4 +24,4 @@ const refreshToken = async (req,res) => {
     }
 }
 
-module.exports = {refreshToken};
+module.exports = {refreshToken, generateAccessToken};

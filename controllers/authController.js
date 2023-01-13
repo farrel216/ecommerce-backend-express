@@ -13,8 +13,8 @@ const login = async (req, res) => {
             const accessToken = jwt.sign({ _id: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" });
             const refreshToken = jwt.sign({ _id: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "1h" });
             User.updateOne({ _id: user._id }, { refresh_token: refreshToken }).then(() => {
-                res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, maxAge: 3600000});
-              res.status(200).send({ message: "Login berhasil", accessToken});
+                res.cookie('refreshToken', refreshToken, { httpOnly: true,secure:true, SameSite:'none',maxAge: 3600000});
+                res.status(200).send({ message: "Login berhasil", accessToken});
             }).catch((error) => {
                 res.status(500).send({ message: "Login gagal", error });
             });
